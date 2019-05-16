@@ -1,1 +1,0 @@
-export const HTTPHOST = "http://localhost:3000";
