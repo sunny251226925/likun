@@ -1,0 +1,68 @@
+{
+	"camera": {
+		"camera1": "http://127.0.0.1:30000/231.html",
+		"camera2": "http://127.0.0.1:30000/232.html",
+		"camera3": "http://127.0.0.1:30000/233.html",
+		"camera4": "http://127.0.0.1:30000/230.html"
+	},
+	"invasion": [{
+		"time": "2019-05-16 18:43:18",
+		"picpath": "imgResource/cappic/007/20190516184318_fjkl_1.263ora.jpg"
+	}, {
+		"time": "2019-05-16 17:45:41",
+		"picpath": "imgResource/cappic/001/20190516174542_fjkl_0.589ora.jpg"
+	}, {
+		"time": "2019-05-16 17:43:02",
+		"picpath": "imgResource/cappic/LK00008/20190516174302_fjkl_1.482ora.jpg"
+	}],
+	"personMo": [{
+		"time": "2019-05-16 20:04:23",
+		"picpath": "imgResource/cappic/001/20190516200423_fjkl_1.462ora.jpg"
+	}, {
+		"time": "2019-05-16 20:04:22",
+		"picpath": "imgResource/cappic/LK00013/20190516200423_fjkl_1.735ora.jpg"
+	}, {
+		"time": "2019-05-16 20:04:22",
+		"picpath": "imgResource/cappic/007/20190516200422_fjkl_1.613ora.jpg"
+	}],
+	"personDetection": [{
+		"time": "2019-05-16 10:26:47",
+		"picpath": "imgResource/cappic/PD/20190516102647605_c2_2_175ora.jpg"
+	}],
+	"deviantBehavior": [{
+		"time": "2019-05-16 09:33:24",
+		"picpath": "imgResource/tracking/move_20190516093324495374.jpg"
+	}],
+	"date": {
+		"invasion": 35,
+		"_5G": 25,
+		"personDetection": 1,
+		"smoke": 4,
+		"personMo": 7067,
+		"run": 0,
+		"fall": 0,
+		"fight": 0
+	},
+	"total": 7112,
+	"alarm": {
+		"local": "走廊",
+		"time": "2019-05-16 20:04:23",
+		"type": "STRANGER"
+	},
+	"trend": {
+		"mouth": {
+			"_1": 25,
+			"_2": 67,
+			"_3": 31,
+			"_4": 14,
+			"_5": 7
+		},
+		"day": {
+			"_1": 0,
+			"_2": 0,
+			"_3": 0,
+			"_4": 441,
+			"_5": 7112
+		}
+	}
+}
