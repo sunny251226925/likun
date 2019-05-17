@@ -1,1 +1,1 @@
-export const HTTPHOST = "http://localhost:3000";
+export const HTTPHOST = "http://ipzf2.zerod.vip:49038";

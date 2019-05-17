@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-axios.defaults.withCredentials = true; //跨域允许传递 cookie
+axios.defaults.withCredentials = false; //跨域允许传递 cookie
 axios.defaults.timeout = 10000; // 请求超时
 
 axios.interceptors.request.use( config => {

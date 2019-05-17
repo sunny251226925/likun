@@ -18,7 +18,7 @@ const myChart =  {
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
             }
         };
-        
+
         let placeHolderStyle = {
             normal: {
                 color: 'rgba(44,59,70,0)', //未完成的圆环的颜色
@@ -84,24 +84,24 @@ const myChart =  {
                 itemStyle: dataStyle,
                 hoverAnimation: false,
                 data: [{
-                        value: value - min,
-                        name: '01',
-                        itemStyle: {
+                    value: value - min,
+                    name: '01',
+                    itemStyle: {
                         normal: {
-                                color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
-                                    offset: 0,
-                                    color: color1
-                                }, {
-                                    offset: 1,
-                                    color: color2
-                                }]),
-                            },
+                            color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+                                offset: 0,
+                                color: color1
+                            }, {
+                                offset: 1,
+                                color: color2
+                            }]),
                         },
-                    }, {
-                        value: max - value,
-                        name: 'invisible',
-                        itemStyle: placeHolderStyle
-                    }
+                    },
+                }, {
+                    value: max - value,
+                    name: 'invisible',
+                    itemStyle: placeHolderStyle
+                }
 
                 ]
             }, {
@@ -130,8 +130,8 @@ const myChart =  {
 
         return option;
     },
-    bar: function(){
-       const option = {
+    bar: function(xTitle,data){
+        const option = {
             color: ['#3398DB'],
             tooltip : {
                 trigger: 'axis',
@@ -148,7 +148,7 @@ const myChart =  {
             xAxis : [
                 {
                     type : 'category',
-                    data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    data : xTitle,
                     axisTick: {
                         alignWithLabel: true
                     },
@@ -165,7 +165,7 @@ const myChart =  {
             ],
             yAxis : [
                 {
-                    type : 'value',
+                    type : '',
                     splitLine: {
                         show: true,
                         lineStyle:{
@@ -187,10 +187,10 @@ const myChart =  {
             ],
             series : [
                 {
-                    name:'直接访问',
+                    name:'',
                     type:'bar',
                     barWidth: 8,
-                    data:[10, 52, 200, 334, 390, 330, 220],
+                    data: data,
                     itemStyle: {
                         normal: {
                             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
@@ -209,126 +209,126 @@ const myChart =  {
         return option;
     },
     map: function(data){
-            var mapName = 'china';
+        var mapName = 'china';
 
-            var geoCoordMap = {};
+        var geoCoordMap = {};
 
-            var computeSize = function(value){
-                var size = 0; //气泡、圆点 大小
-                if( value < 100){
-                    if(value > 0 && value <= 20){
-                        size = 7;
-                    }
-                    if(value > 20 && value <= 40){
-                        size = 10;
-                    }
-                    if(value > 40 && value <= 60){
-                        size = 13;
-                    }
-                    if(value > 60 && value <= 80){
-                        size = 16;
-                    }
-                    if(value > 80 && value <= 100){
-                        size = 19;
-                    }
-                } else {
-                    size = 22;
+        var computeSize = function(value){
+            var size = 0; //气泡、圆点 大小
+            if( value < 100){
+                if(value > 0 && value <= 20){
+                    size = 7;
                 }
-                return size;
+                if(value > 20 && value <= 40){
+                    size = 10;
+                }
+                if(value > 40 && value <= 60){
+                    size = 13;
+                }
+                if(value > 60 && value <= 80){
+                    size = 16;
+                }
+                if(value > 80 && value <= 100){
+                    size = 19;
+                }
+            } else {
+                size = 22;
             }
-        
-            
-            /*获取地图数据*/
-            var mapFeatures = echarts.getMap(mapName).geoJson.features;
-                mapFeatures.forEach(function(v) {
-                    // 地区名称
-                    var name = v.properties.name;
-                    // 地区经纬度
-                    geoCoordMap[name] = v.properties.cp;
-                });
-    
-            var convertData = function(data) {
-                var res = [];
-                for (var i = 0; i < data.length; i++) {
-                    var geoCoord = geoCoordMap[data[i].name];
-                    if (geoCoord) {
-                        res.push({
-                            name: data[i].name,
-                            value: geoCoord.concat(data[i].value)
-                        });
+            return size;
+        }
+
+
+        /*获取地图数据*/
+        var mapFeatures = echarts.getMap(mapName).geoJson.features;
+        mapFeatures.forEach(function(v) {
+            // 地区名称
+            var name = v.properties.name;
+            // 地区经纬度
+            geoCoordMap[name] = v.properties.cp;
+        });
+
+        var convertData = function(data) {
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+                var geoCoord = geoCoordMap[data[i].name];
+                if (geoCoord) {
+                    res.push({
+                        name: data[i].name,
+                        value: geoCoord.concat(data[i].value)
+                    });
+                }
+            }
+            return res;
+        };
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: function(params) {
+                    return params.data.name;
+                }
+            },
+            visualMap: {
+                show: false,
+                min: 0,
+                max: 200,
+                left: 'left',
+                top: 'bottom',
+                text: ['高', '低'], // 文本，默认为数值文本
+                calculable: true,
+                seriesIndex: [1],
+                inRange: {
+                    color: [] // '#00467F', '#A5CC82' 蓝绿
+                }
+            },
+            geo: {
+                show: true,
+                map: mapName,
+                zoom: 1.2,
+                top: "65px",
+                roam: false,
+                label: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: false
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        areaColor: 'rgba(2,53,132,0.6)',
+                        borderColor: '#04FFFF',
+                        opacity: 0.9
+                    },
+                    emphasis: {
+                        areaColor: 'rgba(2,53,132,1)',
                     }
                 }
-                return res;
-            };
-            var option = {
-                tooltip: {
-                    trigger: 'item',
-                    formatter: function(params) {
-                        return params.data.name;
-                    }
+            },
+            series: [{
+                name: '散点',
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                data: convertData(data),
+                symbolSize: function(val) {
+                    return computeSize(val[2]);
                 },
-                visualMap: {
-                    show: false,
-                    min: 0,
-                    max: 200,
-                    left: 'left',
-                    top: 'bottom',
-                    text: ['高', '低'], // 文本，默认为数值文本
-                    calculable: true,
-                    seriesIndex: [1],
-                    inRange: {
-                        color: [] // '#00467F', '#A5CC82' 蓝绿
-                    }
-                },
-                geo: {
-                    show: true,
-                    map: mapName,
-                    zoom: 1.2,
-                    top: "65px",
-                    roam: false,
-                    label: {
-                        normal: {
-                            show: false
-                        },
-                        emphasis: {
-                            show: false
-                        }
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'right',
+                        show: false
                     },
-                    itemStyle: {
-                        normal: {
-                            areaColor: 'rgba(2,53,132,0.6)',
-                            borderColor: '#04FFFF',
-                            opacity: 0.9
-                        },
-                        emphasis: {
-                            areaColor: 'rgba(2,53,132,1)',
-                        }
+                    emphasis: {
+                        show: true
                     }
                 },
-                series: [{
-                    name: '散点',
-                    type: 'scatter',
-                    coordinateSystem: 'geo',
-                    data: convertData(data),
-                    symbolSize: function(val) {
-                        return computeSize(val[2]);
-                    },
-                    label: {
-                        normal: {
-                            formatter: '{b}',
-                            position: 'right',
-                            show: false
-                        },
-                        emphasis: {
-                            show: true
-                        }
-                    },
-                    itemStyle: {
-                        normal: {
-                            color: '#05C3F9'
-                        }
+                itemStyle: {
+                    normal: {
+                        color: '#05C3F9'
                     }
-                },
+                }
+            },
                 {
                     name: '点',
                     type: 'scatter',
@@ -392,10 +392,10 @@ const myChart =  {
                     },
                     zlevel: 1
                 }]
-            };
+        };
 
-            return option;
-        }
+        return option;
+    }
 }
 
 export default myChart;

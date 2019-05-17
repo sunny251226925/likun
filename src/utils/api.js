@@ -5,7 +5,7 @@ const api = {
 
     //更新资源
     getList: () => {
-        return get(HTTPHOST + '/realJSON.json')
+        return get(HTTPHOST + '/api/lk/getVo.do')
     }
 
 };
