@@ -1,5 +1,6 @@
 import React from 'react';
 import './app.css';
+import { HTTPHOST } from './utils/config';
 import setting from './assets/image/setting.png';
 import swiper1 from './assets/image/swiper-1.png';
 import swiper2 from './assets/image/swiper-2.png';
@@ -26,37 +27,49 @@ class app extends React.Component {
             },
             tabList: [
                 {id: 2, name: "走廊"},
-                {id: 4, name: "大厅"},
+                {id: 3, name: "大厅"},
                 {id: 1, name: "办公室"},
                 {id: 4, name: "广场"}
             ],
+            warningType: {
+                "5G": "5G巡航",
+                fall: "行人跌倒警告",
+                fight: "行人斗殴警告",
+                run: "行人跑步警告",
+                invasion: "重点区域入侵",
+                personDetection: "人员异常聚集",
+                personMo: "陌生人告警",
+                smoke: "吸烟识别"
+            },
             tabSelectId: 2,
             mapData: [
                 {name: "北京", value: 55},
-                {name: "山西", value: 81},
-                {name: "内蒙古", value: 47},
-                {name: "河南", value: 137},
-                {name: "湖北", value: 116},
-                {name: "云南", value: 83},
-                {name: "西藏", value: 30},
-                {name: "陕西", value: 80},
-                {name: "甘肃", value: 56},
-                {name: "青海", value: 10},
-                {name: "宁夏", value: 18},
-                {name: "新疆", value: 67},
-                {name: "广东", value: 123},
-                {name: "广西", value: 59},
-                {name: "海南", value: 14}
+                // {name: "山西", value: 81},
+                // {name: "内蒙古", value: 47},
+                // {name: "河南", value: 137},
+                // {name: "湖北", value: 116},
+                // {name: "云南", value: 83},
+                // {name: "西藏", value: 30},
+                {name: "陕西", value: 80}
+                // {name: "甘肃", value: 56},
+                // {name: "青海", value: 10},
+                // {name: "宁夏", value: 18},
+                // {name: "新疆", value: 67},
+                // {name: "广东", value: 123},
+                // {name: "广西", value: 59},
+                // {name: "海南", value: 14}
             ],
-            data: null,
+            data: {},
+            auotTime: 5,
             interval: null,
+            intervalTime: null, 
             swiperList: [],
+            dataTime: [],
             dataType: [
-                {id:1,name:"月度"},
-                {id:2,name:"每日"}
+                {id:1,name:"月度", key:"mouth"},
+                {id:2,name:"每日", key:"day"}
             ],
-            dataTypeValue: {},
-            dataTypeIndex: 1
+            dataSelect: {id:1,name:"月度", key:"mouth"}
         }
     };
 
@@ -68,8 +81,7 @@ class app extends React.Component {
 
     dataTpeChange = (item) => {
         this.setState({
-            dataTypeIndex: item.id,
-            dataTypeValue: item.value
+            dataSelect: item
         })
     };
 
@@ -111,9 +123,17 @@ class app extends React.Component {
                 day: day,
                 mouth: mouth
             };
-
+            
+            res.invasion.forEach(function(item){
+                item.time = item.time.substring(5,item.time.length);
+                item.time = item.time.substring(0,item.time.length-3);
+            })
+            res.personMo.forEach(function(item){
+                item.time = item.time.substring(5,item.time.length);
+                item.time = item.time.substring(0,item.time.length-3);
+            })
             this.setState({
-                data: res,
+                data: res
             });
 
         });
@@ -121,14 +141,57 @@ class app extends React.Component {
 
     componentDidMount() {
         this.getDataInfo();
-        const autoTime = 5000;  //单位ms
+        
+        const d = new Date();
         this.state.interval = setInterval(() => {
             this.getDataInfo();
-        },autoTime)
+        }, 5000)
+
+        this.state.intervalTime = setInterval(() => {
+            let autoTime = this.state.auotTime;
+
+            if(autoTime <= 1){
+                this.setState({
+                    auotTime: 5
+                })
+            } else {
+                autoTime--;
+                this.setState({
+                    auotTime: autoTime
+                })
+            }
+
+            let time = "";
+            let year = d.getFullYear();
+            let month = d.getMonth() + 1;
+            let date = d.getDate();
+            let hh = d.getHours();
+            let mm = d.getMinutes();
+            if(month <= 9){
+                month = "0" + month;
+            }
+            if(date <= 9){
+                date = "0" + date;
+            }
+            if(hh <= 9){
+                hh = "0" + hh;
+            }
+            if(mm <= 9){
+                mm = "0" + mm;
+            }
+
+            time = year + "-" + month + "-" + date + hh + ":" + mm;
+                
+            this.setState({
+                dataTime: time.split("")
+            })
+        }, 1000)
+        
     }
 
     componentWillUnmount(){
          clearInterval(this.state.interval);
+         clearInterval(this.state.intervalTime);
     }
 
     render() {
@@ -157,10 +220,10 @@ class app extends React.Component {
                                         </thead>
                                         <tbody className="tbody">
                                             {
-                                                this.state.swiperList.map( (item) =>
-                                                    <tr className="tr" style={{backgroundImage:"url("+swiper1+")"}}>
+                                                this.state.swiperList.map( (item,index) =>
+                                                    <tr className="tr" style={{backgroundImage:"url("+swiper1+")"}} key={index}>
                                                         <td className="td text-left">{item.local}</td>
-                                                        <td className="td text-left">{item.type}</td>
+                                                        <td className="td text-left">{this.state.warningType[item.type]}</td>
                                                         <td className="td text-right">{item.time}</td>
                                                     </tr>
                                                 )
@@ -177,26 +240,30 @@ class app extends React.Component {
                                         <span>全部</span>
                                     </div>
                                 </div>
-                                <ul className="pie-list">
-                                    <li className="pie">
-                                        <ReactEcharts option={echart.pie("重点区域入侵",this.state.data.date["invasion"],"#7777eb","#70ffac")} style={this.state.pie.style}></ReactEcharts>
-                                    </li>
-                                    <li className="pie">
-                                        <ReactEcharts option={echart.pie("5G 巡航",this.state.data.date["5G"],"#7777eb","#70ffac")} style={this.state.pie.style}></ReactEcharts>
-                                    </li>
-                                    <li className="pie">
-                                        <ReactEcharts option={echart.pie("人员异常聚集",this.state.data.date["personDetection"],"#7777eb","#70ffac")} style={this.state.pie.style}></ReactEcharts>
-                                    </li>
-                                    <li className="pie">
-                                        <ReactEcharts option={echart.pie("吸烟识别", this.state.data.date["smoke"] ,"#7777eb","#70ffac")} style={this.state.pie.style}></ReactEcharts>
-                                    </li>
-                                    <li className="pie">
-                                        <ReactEcharts option={echart.pie("行人斗殴",this.state.data.date["fight"],"#7777eb","#70ffac")} style={this.state.pie.style}></ReactEcharts>
-                                    </li>
-                                    <li className="pie">
-                                        <ReactEcharts option={echart.pie("行人跌倒",this.state.data.date["fall"],"#7777eb","#70ffac")} style={this.state.pie.style}></ReactEcharts>
-                                    </li>
-                                </ul>
+                                {
+                                    this.state.data.date ? 
+                                    <ul className="pie-list">
+                                        <li className="pie">
+                                            <ReactEcharts option={echart.pie("重点区域入侵",this.state.data.date["invasion"],"#7777eb","#70ffac")} style={this.state.pie.style}></ReactEcharts>
+                                        </li>
+                                        <li className="pie">
+                                            <ReactEcharts option={echart.pie("5G 巡航",this.state.data.date["5G"],"#7777eb","#70ffac")} style={this.state.pie.style}></ReactEcharts>
+                                        </li>
+                                        <li className="pie">
+                                            <ReactEcharts option={echart.pie("人员异常聚集",this.state.data.date["personDetection"],"#7777eb","#70ffac")} style={this.state.pie.style}></ReactEcharts>
+                                        </li>
+                                        <li className="pie">
+                                            <ReactEcharts option={echart.pie("吸烟识别", this.state.data.date["smoke"] ,"#7777eb","#70ffac")} style={this.state.pie.style}></ReactEcharts>
+                                        </li>
+                                        <li className="pie">
+                                            <ReactEcharts option={echart.pie("行人斗殴",this.state.data.date["fight"],"#7777eb","#70ffac")} style={this.state.pie.style}></ReactEcharts>
+                                        </li>
+                                        <li className="pie">
+                                            <ReactEcharts option={echart.pie("行人跌倒",this.state.data.date["fall"],"#7777eb","#70ffac")} style={this.state.pie.style}></ReactEcharts>
+                                        </li>
+                                    </ul> : null
+                                }
+                                
                             </div>
                             <div className="item">
                                 <div className="item-title">
@@ -204,7 +271,7 @@ class app extends React.Component {
                                         <span>告警趋势分析</span>
                                         {
                                             this.state.dataType.map( (item) =>
-                                                <span className={this.state.dataTypeIndex === item.id ? "tag active" : "tag"}
+                                                <span className={this.state.dataSelect.id === item.id ? "tag active" : "tag"}
                                                       onClick={this.dataTpeChange.bind(this,item)}
                                                       key={item.id}>
                                                     {item.name}
@@ -213,14 +280,25 @@ class app extends React.Component {
                                         }
                                     </div>
                                     <div className="text-right">
-                                        <span className="color-hui">次/月</span>
+                                        <span className="color-hui">次/{this.state.dataSelect.key === "mouth" ? "月":"日"}</span>
                                     </div>
                                 </div>
-                                <div className="item-body">
-                                    <ReactEcharts
-                                        option={echart.bar(this.state.dataTypeValue.title,this.state.dataTypeValue.data)}
-                                        style={this.state.pie.style}>
-                                    </ReactEcharts>
+                                <div className="item-body"> 
+                                    {
+                                        this.state.data.trend && this.state.data.trend.day && this.state.dataSelect.key === "day" ? 
+                                        <ReactEcharts
+                                            option={echart.bar(this.state.data.trend.day.title,this.state.data.trend.day.value)}
+                                            style={this.state.pie.style}>
+                                        </ReactEcharts> : null
+                                    }
+
+                                    {
+                                        this.state.data.trend && this.state.data.trend.mouth && this.state.dataSelect.key === "mouth" ? 
+                                        <ReactEcharts
+                                            option={echart.bar(this.state.data.trend.mouth.title,this.state.data.trend.mouth.value)}
+                                            style={this.state.pie.style}>
+                                        </ReactEcharts> : null
+                                    }
                                 </div>
                             </div>
                         </li>
@@ -241,22 +319,22 @@ class app extends React.Component {
                                 <div className="item-title">
                                     <div className="text-left">实时监控</div>
                                     <div className="row dateTime">
-                                        <span className="col">2</span>
-                                        <span className="col">0</span>
-                                        <span className="col">1</span>
-                                        <span className="col isNo">9</span>
-                                        <span className="isBorder">-</span>
-                                        <span className="col">0</span>
-                                        <span className="col isNo">2</span>
-                                        <span className="isBorder">-</span>
-                                        <span className="col">5</span>
-                                        <span className="col">2</span>
-                                        <span className="col time">2</span>
-                                        <span className="col time isNo">1</span>
-                                        <span className="isBorder">:</span>
-                                        <span className="col time">4</span>
-                                        <span className="col time">8</span>
-                                        <span className="refresh isBorder">5秒后刷新</span>
+                                        <span className="col">{this.state.dataTime[0]}</span>
+                                        <span className="col">{this.state.dataTime[1]}</span>
+                                        <span className="col">{this.state.dataTime[2]}</span>
+                                        <span className="col isNo">{this.state.dataTime[3]}</span>
+                                        <span className="isBorder">{this.state.dataTime[4]}</span>
+                                        <span className="col">{this.state.dataTime[5]}</span>
+                                        <span className="col isNo">{this.state.dataTime[6]}</span>
+                                        <span className="isBorder">{this.state.dataTime[7]}</span>
+                                        <span className="col">{this.state.dataTime[8]}</span>
+                                        <span className="col">{this.state.dataTime[9]}</span>
+                                        <span className="col time">{this.state.dataTime[10]}</span>
+                                        <span className="col time isNo">{this.state.dataTime[11]}</span>
+                                        <span className="isBorder">{this.state.dataTime[12]}</span>
+                                        <span className="col time">{this.state.dataTime[13]}</span>
+                                        <span className="col time">{this.state.dataTime[14]}</span>
+                                        <span className="refresh isBorder">{this.state.auotTime}秒后刷新</span>
                                     </div>
                                 </div>
                                 <div className="item-body" style={{display:"block"}}>
@@ -271,15 +349,19 @@ class app extends React.Component {
                                         }
                                     </ul>
                                     <div className="video">
-                                        <iframe
-                                            style={{width:'100%', height:"100%", overflow:'visible'}}
-                                            ref="iframe"
-                                            src={this.state.data.camera["camera"+this.state.tabSelectId]}
-                                            width="100%"
-                                            height="100%"
-                                            scrolling="no"
-                                            frameBorder="0"
-                                        />
+                                        {
+                                            this.state.data.camera ? 
+                                            <iframe
+                                                style={{width:'100%', height:"100%", overflow:'visible'}}
+                                                ref="iframe"
+                                                src={this.state.data.camera["camera"+this.state.tabSelectId]}
+                                                width="100%"
+                                                height="100%"
+                                                scrolling="no"
+                                                frameBorder="0"
+                                            /> : null
+                                        }
+                                        
                                         <div className="text-right video-bottom" >
                                             <img src={screenshot} width="53" height="17"></img>
                                         </div>
@@ -293,18 +375,14 @@ class app extends React.Component {
                                     <div className="text-right"></div>
                                 </div>
                                 <ul className="img-list">
-                                    <li className="info">
-                                        <img src={timg}></img>
-                                        <p className="time">05-12 21:03</p>
-                                    </li>
-                                    <li className="info">
-                                        <img src={timg}></img>
-                                        <p className="time">05-12 21:03</p>
-                                    </li>
-                                    <li className="info">
-                                        <img src={timg}></img>
-                                        <p className="time">05-12 21:03</p>
-                                    </li>
+                                        {
+                                            this.state.data && this.state.data.invasion ? this.state.data.invasion.map( (item,index) =>
+                                                <li className="info" key={index}>
+                                                    <img src={HTTPHOST +"/"+ item.picpath}></img>
+                                                    <p className="time">{item.time}</p>
+                                                </li>
+                                            ) : null
+                                        }
                                 </ul>
                             </div>
                             <div className="item" style={{height:"180px"}}>
@@ -313,18 +391,14 @@ class app extends React.Component {
                                     <div className="text-right"></div>
                                 </div>
                                 <ul className="img-list">
-                                    <li className="info">
-                                        <img src={timg}></img>
-                                        <p className="time">05-12 21:03</p>
-                                    </li>
-                                    <li className="info">
-                                        <img src={timg}></img>
-                                        <p className="time">05-12 21:03</p>
-                                    </li>
-                                    <li className="info">
-                                        <img src={timg}></img>
-                                        <p className="time">05-12 21:03</p>
-                                    </li>
+                                        {
+                                            this.state.data  && this.state.data.personMo ? this.state.data.personMo.map( (item,index) =>
+                                                <li className="info" key={index}>
+                                                    <img src={HTTPHOST +"/"+ item.picpath}></img>
+                                                    <p className="time">{item.time}</p>
+                                                </li>
+                                            ) : null
+                                        }
                                 </ul>
                             </div>
                         </li>

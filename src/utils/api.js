@@ -1,4 +1,4 @@
-import { get, put, post } from './http';
+import { get } from './http';
 import { HTTPHOST } from './config';
 
 const api = {

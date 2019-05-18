@@ -5,7 +5,7 @@ echarts.registerMap('china', chinaJson); //将地图数据注册到echart对象
 const myChart =  {
     pie:function(title,value,color1,color2){
         let min = 0;
-        let max = 100;
+        let max = 120;
         let dataStyle = {
             normal: {
                 label: {

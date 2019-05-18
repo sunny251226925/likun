@@ -235,6 +235,8 @@ li{
 }
 .img-list .info img{
   width: 100%;
+
+  height: 100%;
 }
 .img-list .info .time{
   position: relative;
