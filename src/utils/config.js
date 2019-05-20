@@ -1,1 +1,1 @@
-export const HTTPHOST = "http://ipzf2.zerod.vip:49038";
+export const HTTPHOST = "http://ipzf2.zerod.vip:30706";

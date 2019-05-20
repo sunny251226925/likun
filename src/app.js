@@ -145,7 +145,7 @@ class app extends React.Component {
         const d = new Date();
         this.state.interval = setInterval(() => {
             this.getDataInfo();
-        }, 10000)
+        }, 1000)
 
         this.state.intervalTime = setInterval(() => {
             let autoTime = this.state.auotTime;
