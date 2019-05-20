@@ -11,6 +11,8 @@ import screenshot from './assets/image/screenshot.png';
 
 import ReactEcharts from 'echarts-for-react';
 import echart from "../src/component/echarts";
+import Swiper from 'swiper/dist/js/swiper.js'
+import 'swiper/dist/css/swiper.min.css'
 
 import api from "./utils/api";
 
@@ -44,32 +46,23 @@ class app extends React.Component {
             tabSelectId: 2,
             mapData: [
                 {name: "北京", value: 55},
-                // {name: "山西", value: 81},
-                // {name: "内蒙古", value: 47},
-                // {name: "河南", value: 137},
-                // {name: "湖北", value: 116},
-                // {name: "云南", value: 83},
-                // {name: "西藏", value: 30},
                 {name: "陕西", value: 80}
-                // {name: "甘肃", value: 56},
-                // {name: "青海", value: 10},
-                // {name: "宁夏", value: 18},
-                // {name: "新疆", value: 67},
-                // {name: "广东", value: 123},
-                // {name: "广西", value: 59},
-                // {name: "海南", value: 14}
             ],
             data: {},
-            auotTime: 5,
+            auotTime: 2,
             interval: null,
             intervalTime: null, 
             swiperList: [],
             dataTime: [],
+            invasionArray: [],
+            personMoArray: [],
             dataType: [
                 {id:1,name:"月度", key:"mouth"},
                 {id:2,name:"每日", key:"day"}
             ],
-            dataSelect: {id:1,name:"月度", key:"mouth"}
+            dataSelect: {id:1,name:"月度", key:"mouth"},
+            mySwiper: null,
+            mySwiper2: null
         }
     };
 
@@ -128,6 +121,42 @@ class app extends React.Component {
                 item.time = item.time.substring(5,item.time.length);
                 item.time = item.time.substring(0,item.time.length-3);
             })
+            
+            const invasionArray = this.state.invasionArray;
+            if(invasionArray.length < 5){
+                invasionArray.push(res.invasion[0])
+            } else {
+                if(res.invasion[0].picpath !== invasionArray[0].picpath){
+                    invasionArray.splice(0,1);
+                    invasionArray.push(res.invasion[0]);
+                } else {
+                    if(this.state.mySwiper.activeIndex >= 4){
+                        this.state.mySwiper.slideToLoop(0, 2000, false);
+                    }
+                }
+            }
+            this.setState({
+                invasionArray: invasionArray
+            })
+
+
+            const personMoArray = this.state.personMoArray;
+            if(personMoArray.length < 5){
+                personMoArray.push(res.personMo[0])
+            } else {
+                if(res.personMo[0].picpath !== personMoArray[0].picpath){
+                    invasionArray.splice(0,1);
+                    invasionArray.push(res.invasion[0]);
+                } else {
+                    if(this.state.mySwiper2.activeIndex >= 4){
+                        this.state.mySwiper2.slideToLoop(0, 2000, false);
+                    }
+                }
+            }
+            this.setState({
+                invasionArray: invasionArray
+            })
+
             res.personMo.forEach(function(item){
                 item.time = item.time.substring(5,item.time.length);
                 item.time = item.time.substring(0,item.time.length-3);
@@ -142,17 +171,49 @@ class app extends React.Component {
     componentDidMount() {
         this.getDataInfo();
         
-        const d = new Date();
+        this.state.mySwiper = new Swiper ('#swiper1', {
+                loop: true,  //循环
+                slidesPerView : 3,
+                loopedSlides: 3,
+                centeredSlides : true,
+                spaceBetween : 20,
+                observer: true,
+                autoplay: {   //滑动后继续播放（不写官方默认暂停）
+                    disableOnInteraction: false,
+                },
+                pagination: {  //分页器
+                    el: '.swiper-pagination'
+                }
+        })
+ 
+
+                
+        this.state.mySwiper2 = new Swiper ('#swiper2', {
+            loop: true,  //循环
+            slidesPerView : 3,
+            loopedSlides: 3,
+            centeredSlides : true,
+            spaceBetween : 20,
+            observer: true,
+            autoplay: {   //滑动后继续播放（不写官方默认暂停）
+                disableOnInteraction: false,
+            },
+            pagination: {  //分页器
+                el: '.swiper-pagination'
+            }
+        })
+        
         this.state.interval = setInterval(() => {
             this.getDataInfo();
-        }, 1000)
+        }, 2000)
 
         this.state.intervalTime = setInterval(() => {
+            let d = new Date();
             let autoTime = this.state.auotTime;
 
             if(autoTime <= 1){
                 this.setState({
-                    auotTime: 5
+                    auotTime: 2
                 })
             } else {
                 autoTime--;
@@ -181,10 +242,11 @@ class app extends React.Component {
             }
 
             time = year + "-" + month + "-" + date + hh + ":" + mm;
-                
+               
             this.setState({
                 dataTime: time.split("")
             })
+            
         }, 1000)
         
     }
@@ -374,32 +436,36 @@ class app extends React.Component {
                                     <div className="text-left">重点区域入侵</div>
                                     <div className="text-right"></div>
                                 </div>
-                                <ul className="img-list">
+                                <div className="swiper-container" id="swiper1">
+                                    <div className="swiper-wrapper">
                                         {
-                                            this.state.data && this.state.data.invasion ? this.state.data.invasion.map( (item,index) =>
-                                                <li className="info" key={index}>
+                                            this.state.invasionArray.length > 0 ? this.state.invasionArray.map( (item,index) =>
+                                                <div className="swiper-slide" key={index}>
                                                     <img src={HTTPHOST +"/"+ item.picpath}></img>
                                                     <p className="time">{item.time}</p>
-                                                </li>
+                                                </div> 
                                             ) : null
                                         }
-                                </ul>
+                                    </div>
+                                </div>  
                             </div>
                             <div className="item" style={{height:"180px"}}>
                                 <div className="item-title">
                                     <div className="text-left">陌生人警告</div>
                                     <div className="text-right"></div>
                                 </div>
-                                <ul className="img-list">
+                                <div className="swiper-container" id="swiper2">
+                                    <div className="swiper-wrapper">
                                         {
-                                            this.state.data  && this.state.data.personMo ? this.state.data.personMo.map( (item,index) =>
-                                                <li className="info" key={index}>
+                                            this.state.personMoArray.length > 0 ? this.state.personMoArray.map( (item,index) =>
+                                                <div className="swiper-slide" key={index}>
                                                     <img src={HTTPHOST +"/"+ item.picpath}></img>
                                                     <p className="time">{item.time}</p>
-                                                </li>
+                                                </div> 
                                             ) : null
                                         }
-                                </ul>
+                                    </div>
+                                </div>  
                             </div>
                         </li>
                     </ul> : null

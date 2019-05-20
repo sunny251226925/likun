@@ -221,23 +221,15 @@ li{
   font-size: 32px;
 }
 
-.img-list{
+.swiper-container{
   position: relative;
-  display: flex;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  top: 20px;
 }
-.img-list .info{
-  position: relative;
-  flex: 0 0 33%;
-  margin-right: 10px;
-  text-align: center;
-}
-.img-list .info img{
+.swiper-slide img{
   width: 100%;
-  height: 100%;
+  height: 130px;
 }
-.img-list .info .time{
+.swiper-slide .time{
   position: relative;
   width: 100%;
   height: 20px;
@@ -248,9 +240,7 @@ li{
   text-align: center;
   z-index: 1;
 }
-.img-list .info:last-child{
-  margin-right: 0;
-}
+
 
 .row{
   display: flex;
