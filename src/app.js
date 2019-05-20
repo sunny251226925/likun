@@ -145,7 +145,7 @@ class app extends React.Component {
         const d = new Date();
         this.state.interval = setInterval(() => {
             this.getDataInfo();
-        }, 5000)
+        }, 10000)
 
         this.state.intervalTime = setInterval(() => {
             let autoTime = this.state.auotTime;
@@ -334,7 +334,7 @@ class app extends React.Component {
                                         <span className="isBorder">{this.state.dataTime[12]}</span>
                                         <span className="col time">{this.state.dataTime[13]}</span>
                                         <span className="col time">{this.state.dataTime[14]}</span>
-                                        <span className="refresh isBorder">{this.state.auotTime}秒后刷新</span>
+                                        {/* <span className="refresh isBorder">{this.state.auotTime}秒后刷新</span> */}
                                     </div>
                                 </div>
                                 <div className="item-body" style={{display:"block"}}>
