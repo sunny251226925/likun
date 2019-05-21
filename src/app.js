@@ -123,17 +123,20 @@ class app extends React.Component {
             })
             
             const invasionArray = this.state.invasionArray;
-            if(invasionArray.length < 5){
-                invasionArray.push(res.invasion[0])
-            } else {
-                if(res.invasion[0].picpath !== invasionArray[0].picpath){
-                    invasionArray.splice(0,1);
-                    invasionArray.push(res.invasion[0]);
-                } else {
-                    if(this.state.mySwiper.activeIndex >= 4){
-                        this.state.mySwiper.slideToLoop(0, 2000, false);
+            if(invasionArray.length > 0){
+                if(res.invasion[0].picpath !== invasionArray[invasionArray.length - 1].picpath){
+                    if(invasionArray.length < 5){
+                        invasionArray.push(res.invasion[0])
+                    } else {
+                        invasionArray.splice(0,1);
+                        invasionArray.push(res.invasion[0]);
+                        if(this.state.mySwiper.activeIndex >= 4){
+                            this.state.mySwiper.slideToLoop(0, 2000, false);
+                        }
                     }
-                }
+                } 
+            } else {
+                invasionArray.push(res.invasion[0])
             }
             this.setState({
                 invasionArray: invasionArray
@@ -141,20 +144,23 @@ class app extends React.Component {
 
 
             const personMoArray = this.state.personMoArray;
-            if(personMoArray.length < 5){
-                personMoArray.push(res.personMo[0])
-            } else {
-                if(res.personMo[0].picpath !== personMoArray[0].picpath){
-                    invasionArray.splice(0,1);
-                    invasionArray.push(res.invasion[0]);
-                } else {
-                    if(this.state.mySwiper2.activeIndex >= 4){
-                        this.state.mySwiper2.slideToLoop(0, 2000, false);
+            if(personMoArray.length > 0){
+                if(res.personMo[0].picpath !== personMoArray[personMoArray.length - 1].picpath){
+                    if(personMoArray.length < 5){
+                        personMoArray.push(res.personMo[0])
+                    } else {
+                        personMoArray.splice(0,1);
+                        personMoArray.push(res.personMo[0]);
+                        if(this.state.mySwiper2.activeIndex >= 4){
+                            this.state.mySwiper2.slideToLoop(0, 2000, false);
+                        }
                     }
-                }
+                } 
+            } else {
+                personMoArray.push(res.personMo[0])
             }
             this.setState({
-                invasionArray: invasionArray
+                personMoArray: personMoArray
             })
 
             res.personMo.forEach(function(item){
@@ -174,32 +180,23 @@ class app extends React.Component {
         this.state.mySwiper = new Swiper ('#swiper1', {
                 loop: true,  //循环
                 slidesPerView : 3,
-                loopedSlides: 3,
                 centeredSlides : true,
                 spaceBetween : 20,
                 observer: true,
                 autoplay: {   //滑动后继续播放（不写官方默认暂停）
                     disableOnInteraction: false,
-                },
-                pagination: {  //分页器
-                    el: '.swiper-pagination'
                 }
         })
  
 
-                
         this.state.mySwiper2 = new Swiper ('#swiper2', {
             loop: true,  //循环
             slidesPerView : 3,
-            loopedSlides: 3,
             centeredSlides : true,
             spaceBetween : 20,
             observer: true,
             autoplay: {   //滑动后继续播放（不写官方默认暂停）
                 disableOnInteraction: false,
-            },
-            pagination: {  //分页器
-                el: '.swiper-pagination'
             }
         })
         
