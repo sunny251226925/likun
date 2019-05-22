@@ -3,10 +3,7 @@ import './app.css';
 import { HTTPHOST } from './utils/config';
 import setting from './assets/image/setting.png';
 import swiper1 from './assets/image/swiper-1.png';
-import swiper2 from './assets/image/swiper-2.png';
-import swiper3 from './assets/image/swiper-3.png';
 import mapInfo from './assets/image/mapInfo.png';
-import timg from './assets/image/timg.png';
 import screenshot from './assets/image/screenshot.png';
 
 import ReactEcharts from 'echarts-for-react';
@@ -128,20 +125,18 @@ class app extends React.Component {
                     if(invasionArray.length < 5){
                         invasionArray.push(res.invasion[0])
                     } else {
-                        invasionArray.splice(0,1);
-                        invasionArray.push(res.invasion[0]);
-                        if(this.state.mySwiper.activeIndex >= 4){
-                            this.state.mySwiper.slideToLoop(0, 2000, false);
-                        }
+                        invasionArray.push(res.invasion[0])
                     }
-                } 
+                }
             } else {
                 invasionArray.push(res.invasion[0])
             }
+
+            this.state.mySwiper.slideTo(invasionArray.length-1, 500, false);
+
             this.setState({
                 invasionArray: invasionArray
             })
-
 
             const personMoArray = this.state.personMoArray;
             if(personMoArray.length > 0){
@@ -149,19 +144,17 @@ class app extends React.Component {
                     if(personMoArray.length < 5){
                         personMoArray.push(res.personMo[0])
                     } else {
-                        personMoArray.splice(0,1);
                         personMoArray.push(res.personMo[0]);
-                        if(this.state.mySwiper2.activeIndex >= 4){
-                            this.state.mySwiper2.slideToLoop(0, 2000, false);
-                        }
                     }
                 } 
             } else {
                 personMoArray.push(res.personMo[0])
             }
+
             this.setState({
                 personMoArray: personMoArray
             })
+
 
             res.personMo.forEach(function(item){
                 item.time = item.time.substring(5,item.time.length);
@@ -176,28 +169,19 @@ class app extends React.Component {
 
     componentDidMount() {
         this.getDataInfo();
-        
-        this.state.mySwiper = new Swiper ('#swiper1', {
-                loop: true,  //循环
-                slidesPerView : 3,
-                centeredSlides : true,
-                spaceBetween : 20,
-                observer: true,
-                autoplay: {   //滑动后继续播放（不写官方默认暂停）
-                    disableOnInteraction: false,
-                }
-        })
- 
 
-        this.state.mySwiper2 = new Swiper ('#swiper2', {
-            loop: true,  //循环
+        this.state.mySwiper = new Swiper ('#swiper1', {
             slidesPerView : 3,
             centeredSlides : true,
             spaceBetween : 20,
-            observer: true,
-            autoplay: {   //滑动后继续播放（不写官方默认暂停）
-                disableOnInteraction: false,
-            }
+            observer: true
+        })
+
+        this.state.mySwiper2 = new Swiper ('#swiper2', {
+            slidesPerView :3,
+            centeredSlides: true,
+            spaceBetween: 20,
+            observer: true
         })
         
         this.state.interval = setInterval(() => {
