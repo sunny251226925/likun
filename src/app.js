@@ -41,10 +41,7 @@ class app extends React.Component {
                 smoke: "吸烟识别"
             },
             tabSelectId: 2,
-            mapData: [
-                {name: "北京", value: 55},
-                {name: "陕西", value: 80}
-            ],
+            mapData: [],
             data: {},
             auotTime: 2,
             interval: null,
@@ -134,10 +131,6 @@ class app extends React.Component {
 
             this.state.mySwiper.slideTo(invasionArray.length-1, 500, false);
 
-            this.setState({
-                invasionArray: invasionArray
-            })
-
             const personMoArray = this.state.personMoArray;
             if(personMoArray.length > 0){
                 if(res.personMo[0].picpath !== personMoArray[personMoArray.length - 1].picpath){
@@ -152,17 +145,16 @@ class app extends React.Component {
             }
             this.state.mySwiper2.slideTo(personMoArray.length-1, 500, false);
 
-            this.setState({
-                personMoArray: personMoArray
-            })
-
 
             res.personMo.forEach(function(item){
                 item.time = item.time.substring(5,item.time.length);
                 item.time = item.time.substring(0,item.time.length-3);
             })
             this.setState({
-                data: res
+                data: res,
+                personMoArray: personMoArray,
+                invasionArray: invasionArray,
+                mapData: res.map
             });
 
         });
