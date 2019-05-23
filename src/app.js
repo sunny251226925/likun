@@ -150,6 +150,7 @@ class app extends React.Component {
             } else {
                 personMoArray.push(res.personMo[0])
             }
+            this.state.mySwiper2.slideTo(personMoArray.length-1, 500, false);
 
             this.setState({
                 personMoArray: personMoArray
