@@ -5,11 +5,12 @@ import setting from './assets/image/setting.png';
 import swiper1 from './assets/image/swiper-1.png';
 import mapInfo from './assets/image/mapInfo.png';
 import screenshot from './assets/image/screenshot.png';
-
 import ReactEcharts from 'echarts-for-react';
 import echart from "../src/component/echarts";
 import Swiper from 'swiper/dist/js/swiper.js'
 import 'swiper/dist/css/swiper.min.css'
+
+import 'element-theme-default';
 
 import api from "./utils/api";
 
@@ -56,7 +57,8 @@ class app extends React.Component {
             ],
             dataSelect: {id:1,name:"月度", key:"mouth"},
             mySwiper: null,
-            mySwiper2: null
+            mySwiper2: null,
+            mySwiper3: null
         }
     };
 
@@ -79,10 +81,15 @@ class app extends React.Component {
                 if(key !== "alarm"){
                     data[key] = res[key];
                 } else {
-                    if(this.state.swiperList.length >= 3){
-                        this.state.swiperList.splice(0,1);
-                        this.state.swiperList.push(res[key]);
-                    } else {
+                    // if(this.state.swiperList.length > 5){
+                    //     this.state.swiperList.push(res[key]);
+                    // } else {
+                    //     this.state.swiperList.push(res[key]);
+                    // }
+                    if(this.state.swiperList.length > 30 ){
+                        this.state.swiperList.splice(0,10);
+                    }
+                    for (var i=0;i<10;i++){
                         this.state.swiperList.push(res[key]);
                     }
                 }
@@ -117,33 +124,43 @@ class app extends React.Component {
             })
             
             const invasionArray = this.state.invasionArray;
-            if(invasionArray.length > 0){
-                if(res.invasion[0].picpath !== invasionArray[invasionArray.length - 1].picpath){
-                    if(invasionArray.length < 5){
-                        invasionArray.push(res.invasion[0])
-                    } else {
-                        invasionArray.push(res.invasion[0])
-                    }
-                }
-            } else {
+            // if(invasionArray.length > 0){
+            //     if(res.invasion[0].picpath !== invasionArray[invasionArray.length - 1].picpath){
+            //         if(invasionArray.length < 5){
+            //             invasionArray.push(res.invasion[0])
+            //         } else {
+            //             invasionArray.push(res.invasion[0])
+            //         }
+            //
+            //     }
+            // } else {
+            //     invasionArray.push(res.invasion[0])
+            // }
+            if(invasionArray.length > 20){
+                invasionArray.splice(0,10)
+            }
+            for (var i=0;i<3;i++){
                 invasionArray.push(res.invasion[0])
             }
 
-            this.state.mySwiper.slideTo(invasionArray.length-1, 500, false);
-
             const personMoArray = this.state.personMoArray;
-            if(personMoArray.length > 0){
-                if(res.personMo[0].picpath !== personMoArray[personMoArray.length - 1].picpath){
-                    if(personMoArray.length < 5){
-                        personMoArray.push(res.personMo[0])
-                    } else {
-                        personMoArray.push(res.personMo[0]);
-                    }
-                } 
-            } else {
-                personMoArray.push(res.personMo[0])
+            // if(personMoArray.length > 0){
+            //     if(res.personMo[0].picpath !== personMoArray[personMoArray.length - 1].picpath){
+            //         if(personMoArray.length < 5){
+            //             personMoArray.push(res.personMo[0])
+            //         } else {
+            //             personMoArray.push(res.personMo[0]);
+            //         }
+            //     }
+            // } else {
+            //     personMoArray.push(res.personMo[0])
+            // }
+            if(personMoArray.length > 20){
+                personMoArray.splice(0,10)
             }
-            this.state.mySwiper2.slideTo(personMoArray.length-1, 500, false);
+            for (var i=0;i<10;i++){
+                personMoArray.push(res.invasion[0])
+            }
 
 
             res.personMo.forEach(function(item){
@@ -167,16 +184,38 @@ class app extends React.Component {
             slidesPerView : 3,
             centeredSlides : true,
             spaceBetween : 20,
-            observer: true
+            observer: true,
+            autoplay: {
+                delay: 1000,
+                stopOnLastSlide: false,
+                disableOnInteraction: false
+            }
         })
 
         this.state.mySwiper2 = new Swiper ('#swiper2', {
             slidesPerView :3,
             centeredSlides: true,
             spaceBetween: 20,
-            observer: true
+            observer: true,
+            autoplay: {
+                delay: 1000,
+                stopOnLastSlide: false,
+                disableOnInteraction: false
+            }
         })
-        
+
+        this.state.mySwiper3 = new Swiper ('#swiper3', {
+            slidesPerView: 5,
+            direction: 'vertical',
+            observer: true,
+            height: 200,
+            autoplay: {
+              delay: 1000,
+              stopOnLastSlide: false,
+              disableOnInteraction: false
+            }
+        })
+
         this.state.interval = setInterval(() => {
             this.getDataInfo();
         }, 2000)
@@ -245,27 +284,25 @@ class app extends React.Component {
                                     <div className="text-left">告警轮播</div>
                                     <div className="text-right"></div>
                                 </div>
-                                <div className="item-body">
-                                    <table className="table">
-                                        <thead className="thead">
-                                        <tr className="tr">
-                                            <td className="td text-left">区域</td>
-                                            <td className="td text-left">告警类型</td>
-                                            <td className="td text-right">时间</td>
-                                        </tr>
-                                        </thead>
-                                        <tbody className="tbody">
+                                <div className="item-body block">
+                                    <ul className="row h20">
+                                        <li className="col text-left">区域</li>
+                                        <li className="col text-left">告警类型</li>
+                                        <li className="col text-right">时间</li>
+                                    </ul>
+                                    <div className="swiper-container gaojing"  id="swiper3">
+                                        <ul className="swiper-wrapper">
                                             {
                                                 this.state.swiperList.map( (item,index) =>
-                                                    <tr className="tr" style={{backgroundImage:"url("+swiper1+")"}} key={index}>
-                                                        <td className="td text-left">{item.local}</td>
-                                                        <td className="td text-left">{this.state.warningType[item.type]}</td>
-                                                        <td className="td text-right">{item.time}</td>
-                                                    </tr>
+                                                    <li className="swiper-slide bg-img" style={{backgroundImage:"url("+swiper1+")"}} key={index}>
+                                                        <td className="col text-left">{item.local}</td>
+                                                        <td className="col text-left">{this.state.warningType[item.type]}</td>
+                                                        <td className="col text-right">{item.time}</td>
+                                                    </li>
                                                 )
                                             }
-                                        </tbody>
-                                    </table>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                             <div className="item">
@@ -342,8 +379,7 @@ class app extends React.Component {
                             <ReactEcharts option={echart.map(this.state.mapData)}  style={this.state.pie.style}></ReactEcharts>
                             <div className="mapInfo">
                                 <div className="col-right" style={{backgroundImage:"url("+mapInfo+")"}}>
-                                    <p>今日警告总数</p>
-                                    <p>{this.state.data.total}</p>
+                                    <ReactEcharts option={echart.total(this.state.data.total)}  style={this.state.pie.style}></ReactEcharts>
                                 </div>
                                 <div className="col-left">
                                     <span></span>
@@ -431,15 +467,15 @@ class app extends React.Component {
                                 <div className="swiper-container" id="swiper2">
                                     <div className="swiper-wrapper">
                                         {
-                                            this.state.personMoArray.length > 0 ? this.state.personMoArray.map( (item,index) =>
+                                            this.state.personMoArray.length > 0 ? this.state.invasionArray.map( (item,index) =>
                                                 <div className="swiper-slide" key={index}>
                                                     <img src={HTTPHOST +"/"+ item.picpath}></img>
                                                     <p className="time">{item.time}</p>
-                                                </div> 
+                                                </div>
                                             ) : null
                                         }
                                     </div>
-                                </div>  
+                                </div>
                             </div>
                         </li>
                     </ul> : null

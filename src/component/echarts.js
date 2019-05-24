@@ -395,6 +395,42 @@ const myChart =  {
         };
 
         return option;
+    },
+    total: function (data) {
+        const option = {
+            title: {
+                text: '今日警告总数',
+                top: '0%',
+                left: 'left',
+                textStyle: {
+                    color: '#fff',
+                    fontSize: 18
+                }
+            },
+            "color": ["#fff", '#fff', 'rgba(255,255,255,.2)'],
+            "series": [{
+                "type": "pie",
+                "center": ["30px", "50px"],
+                "radius": ["0%", "0%"],
+                "hoverAnimation": false,
+                "data": [{
+                    "name": "",
+                    "value": data,
+                    "label": {
+                        "show": true,
+                        "position": "center",
+                        "color": "#fff",
+                        "fontSize": 38,
+                        "fontWeight": "bold",
+                        "formatter": function(o) {
+                            return data
+                        }
+                    }
+                }
+                ]
+            }]
+        }
+        return option;
     }
 }
 

@@ -99,6 +99,7 @@ li{
 .item-body{
   display: flex;
   height: calc(100% - 30px);
+  padding-bottom: 10px;
   color: #D8EEFC;
 }
 .item-title{
@@ -172,6 +173,12 @@ li{
   background-size: 100% 100%;
 }
 
+.bg-img{
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
 .pie-list{
   position: relative;
   display: flex;
@@ -207,6 +214,7 @@ li{
   margin-right: 10px;
 }
 .mapInfo .col-right{
+  position: relative;
   width: 206px;
   height: 100%;
   background-repeat: no-repeat;
@@ -216,8 +224,12 @@ li{
   padding: 5px 20px;
   text-align: left;
   box-sizing: border-box;
+  overflow: hidden;
 }
 .mapInfo .col-right p:last-child{
+  position: absolute;
+  left: 20px;
+  top: 25px;
   font-size: 32px;
 }
 
@@ -240,10 +252,29 @@ li{
   text-align: center;
   z-index: 1;
 }
+.swiper-container.gaojing{
+    height: 200px;
+}
+.swiper-container.gaojing .swiper-slide{
+  display: flex;
+  transition: all .1s;
+}
+.swiper-container.gaojing .swiper-slide .col{
+  line-height: 40px;
+  font-size: 12px;
+}
 
 
 .row{
+  position: relative;
   display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+.row.h20{
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
 }
 .col{
   display: block;
@@ -282,6 +313,9 @@ li{
 .dateTime .time{
   background: linear-gradient(#4A90E2,  #6AD7FF);
   border: none;
+}
+.block{
+  display: block !important;
 }
 .tabs{
   position: relative;
