@@ -404,13 +404,13 @@ const myChart =  {
                 left: 'left',
                 textStyle: {
                     color: '#fff',
-                    fontSize: 18
+                    fontSize: 16
                 }
             },
             "color": ["#fff", '#fff', 'rgba(255,255,255,.2)'],
             "series": [{
                 "type": "pie",
-                "center": ["30px", "50px"],
+                "center": ["33px", "45px"],
                 "radius": ["0%", "0%"],
                 "hoverAnimation": false,
                 "data": [{
@@ -420,7 +420,7 @@ const myChart =  {
                         "show": true,
                         "position": "center",
                         "color": "#fff",
-                        "fontSize": 38,
+                        "fontSize": 30,
                         "fontWeight": "bold",
                         "formatter": function(o) {
                             return data

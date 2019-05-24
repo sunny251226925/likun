@@ -10,8 +10,6 @@ import echart from "../src/component/echarts";
 import Swiper from 'swiper/dist/js/swiper.js'
 import 'swiper/dist/css/swiper.min.css'
 
-import 'element-theme-default';
-
 import api from "./utils/api";
 
 class app extends React.Component {
@@ -75,26 +73,8 @@ class app extends React.Component {
     };
 
     getDataInfo = () => {
-        let data = {};
         api.getList().then( (res) => {
-            for(let key in res){
-                if(key !== "alarm"){
-                    data[key] = res[key];
-                } else {
-                    // if(this.state.swiperList.length > 5){
-                    //     this.state.swiperList.push(res[key]);
-                    // } else {
-                    //     this.state.swiperList.push(res[key]);
-                    // }
-                    if(this.state.swiperList.length > 30 ){
-                        this.state.swiperList.splice(0,10);
-                    }
-                    for (var i=0;i<10;i++){
-                        this.state.swiperList.push(res[key]);
-                    }
-                }
-            }
-
+              
             const day = {
                 title: [],
                 value: []
@@ -122,46 +102,24 @@ class app extends React.Component {
                 item.time = item.time.substring(5,item.time.length);
                 item.time = item.time.substring(0,item.time.length-3);
             })
+
+            let swiperList = [];
+                swiperList = this.state.swiperList.concat(res.alarm);
+            // if(alarm.length > 30){
+            //     alarm.splice(0,10);
+            // }
             
-            const invasionArray = this.state.invasionArray;
-            // if(invasionArray.length > 0){
-            //     if(res.invasion[0].picpath !== invasionArray[invasionArray.length - 1].picpath){
-            //         if(invasionArray.length < 5){
-            //             invasionArray.push(res.invasion[0])
-            //         } else {
-            //             invasionArray.push(res.invasion[0])
-            //         }
-            //
-            //     }
-            // } else {
-            //     invasionArray.push(res.invasion[0])
+            let invasionArray = [];
+                invasionArray = this.state.invasionArray.concat(res.personDetection);
+            // if(invasionArray.length > 20){
+            //     invasionArray.splice(0,10)
             // }
-            if(invasionArray.length > 20){
-                invasionArray.splice(0,10)
-            }
-            for (var i=0;i<3;i++){
-                invasionArray.push(res.invasion[0])
-            }
 
-            const personMoArray = this.state.personMoArray;
-            // if(personMoArray.length > 0){
-            //     if(res.personMo[0].picpath !== personMoArray[personMoArray.length - 1].picpath){
-            //         if(personMoArray.length < 5){
-            //             personMoArray.push(res.personMo[0])
-            //         } else {
-            //             personMoArray.push(res.personMo[0]);
-            //         }
-            //     }
-            // } else {
-            //     personMoArray.push(res.personMo[0])
+            let personMoArray = [];
+                personMoArray = this.state.personMoArray.concat(res.personMo);
+            // if(personMoArray.length > 20){
+            //     personMoArray.splice(0,10)
             // }
-            if(personMoArray.length > 20){
-                personMoArray.splice(0,10)
-            }
-            for (var i=0;i<10;i++){
-                personMoArray.push(res.invasion[0])
-            }
-
 
             res.personMo.forEach(function(item){
                 item.time = item.time.substring(5,item.time.length);
@@ -169,6 +127,7 @@ class app extends React.Component {
             })
             this.setState({
                 data: res,
+                swiperList: swiperList,
                 personMoArray: personMoArray,
                 invasionArray: invasionArray,
                 mapData: res.map
@@ -186,7 +145,7 @@ class app extends React.Component {
             spaceBetween : 20,
             observer: true,
             autoplay: {
-                delay: 1000,
+                delay: 1500,
                 stopOnLastSlide: false,
                 disableOnInteraction: false
             }
@@ -198,19 +157,19 @@ class app extends React.Component {
             spaceBetween: 20,
             observer: true,
             autoplay: {
-                delay: 1000,
+                delay: 1500,
                 stopOnLastSlide: false,
                 disableOnInteraction: false
             }
         })
 
         this.state.mySwiper3 = new Swiper ('#swiper3', {
-            slidesPerView: 5,
+            slidesPerView: 4,
             direction: 'vertical',
             observer: true,
-            height: 200,
+            height: 160,
             autoplay: {
-              delay: 1000,
+              delay: 1500,
               stopOnLastSlide: false,
               disableOnInteraction: false
             }
@@ -286,7 +245,7 @@ class app extends React.Component {
                                 </div>
                                 <div className="item-body block">
                                     <ul className="row h20">
-                                        <li className="col text-left">区域</li>
+                                        <li className="col col-1 text-left" style={{width:"30px"}}>区域</li>
                                         <li className="col text-left">告警类型</li>
                                         <li className="col text-right">时间</li>
                                     </ul>
@@ -295,7 +254,7 @@ class app extends React.Component {
                                             {
                                                 this.state.swiperList.map( (item,index) =>
                                                     <li className="swiper-slide bg-img" style={{backgroundImage:"url("+swiper1+")"}} key={index}>
-                                                        <td className="col text-left">{item.local}</td>
+                                                        <td className="col col-1 text-left">{item.local}</td>
                                                         <td className="col text-left">{this.state.warningType[item.type]}</td>
                                                         <td className="col text-right">{item.time}</td>
                                                     </li>
@@ -379,7 +338,9 @@ class app extends React.Component {
                             <ReactEcharts option={echart.map(this.state.mapData)}  style={this.state.pie.style}></ReactEcharts>
                             <div className="mapInfo">
                                 <div className="col-right" style={{backgroundImage:"url("+mapInfo+")"}}>
-                                    <ReactEcharts option={echart.total(this.state.data.total)}  style={this.state.pie.style}></ReactEcharts>
+                                    <p>今日警告总数</p>
+                                    <p className="numberAnimation">{this.state.data.total}</p>
+                                    {/* <ReactEcharts option={echart.total(this.state.data.total)}  style={this.state.pie.style}></ReactEcharts> */}
                                 </div>
                                 <div className="col-left">
                                     <span></span>

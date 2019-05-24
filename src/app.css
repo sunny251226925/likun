@@ -253,7 +253,8 @@ li{
   z-index: 1;
 }
 .swiper-container.gaojing{
-    height: 200px;
+    height: 160px;
+    top: 5px !important;
 }
 .swiper-container.gaojing .swiper-slide{
   display: flex;
@@ -263,7 +264,6 @@ li{
   line-height: 40px;
   font-size: 12px;
 }
-
 
 .row{
   position: relative;
@@ -276,6 +276,7 @@ li{
   line-height: 20px;
   font-size: 12px;
 }
+
 .col{
   display: block;
   flex: 1;
@@ -283,6 +284,9 @@ li{
   padding: 0 2px;
   line-height: 16px;
   text-align: center;
+}
+.col-1{
+  flex: 0 0 60px;
 }
 .dateTime{
   position: relative;
@@ -357,11 +361,18 @@ li{
   height: 17px;
 }
 
+.numberAnimation{
+  animation: App-logo-spin 3s ease-in infinite;
+}
+
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  0% {
+    transform: rotateX(0deg);
   }
-  to {
-    transform: rotate(360deg);
+  50%{
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
   }
 }
