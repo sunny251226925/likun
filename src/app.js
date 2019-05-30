@@ -254,9 +254,9 @@ class app extends React.Component {
                                             {
                                                 this.state.swiperList.map( (item,index) =>
                                                     <li className="swiper-slide bg-img" style={{backgroundImage:"url("+swiper1+")"}} key={index}>
-                                                        <td className="col col-1 text-left">{item.local}</td>
-                                                        <td className="col text-left">{this.state.warningType[item.type]}</td>
-                                                        <td className="col text-right">{item.time}</td>
+                                                        <div className="col col-1 text-left">{item.local}</div>
+                                                        <div className="col text-left">{this.state.warningType[item.type]}</div>
+                                                        <div className="col text-right">{item.time}</div>
                                                     </li>
                                                 )
                                             }
