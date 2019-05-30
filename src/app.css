@@ -297,6 +297,9 @@ li{
   border: 1px solid #fff;
   font-size: 12px;
   margin-right: 3px;
+  width: 16px;
+  height: 16px;
+  line-height: 15px;
   box-sizing: border-box;
 }
 .dateTime .isNo{
@@ -304,10 +307,10 @@ li{
 }
 .dateTime .isBorder{
   display: block;
+  width: 8px;
   height: 16px;
-  line-height: 16px;
+  line-height: 15px;
   text-align: center;
-  border: 1px solid #fff;
   font-size: 12px;
   border: 1px solid transparent;
 }

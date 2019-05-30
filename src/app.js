@@ -110,7 +110,7 @@ class app extends React.Component {
             // }
             
             let invasionArray = [];
-                invasionArray = this.state.invasionArray.concat(res.personDetection);
+                invasionArray = this.state.invasionArray.concat(res.invasion);
             // if(invasionArray.length > 20){
             //     invasionArray.splice(0,10)
             // }
@@ -350,7 +350,7 @@ class app extends React.Component {
                         <li className="container-right">
                             <div className="item" >
                                 <div className="item-title">
-                                    <div className="text-left">实时监控</div>
+                                    <div className="text-left" style={{flex: "0 0 100px"}}>实时监控</div>
                                     <div className="row dateTime">
                                         <span className="col">{this.state.dataTime[0]}</span>
                                         <span className="col">{this.state.dataTime[1]}</span>
@@ -428,7 +428,7 @@ class app extends React.Component {
                                 <div className="swiper-container" id="swiper2">
                                     <div className="swiper-wrapper">
                                         {
-                                            this.state.personMoArray.length > 0 ? this.state.invasionArray.map( (item,index) =>
+                                            this.state.personMoArray.length > 0 ? this.state.personMoArray.map( (item,index) =>
                                                 <div className="swiper-slide" key={index}>
                                                     <img src={HTTPHOST +"/"+ item.picpath}></img>
                                                     <p className="time">{item.time}</p>
