@@ -104,6 +104,9 @@ class app extends React.Component {
             })
 
             let swiperList = [];
+            res.alarm.forEach(function(item){
+
+            })
                 swiperList = this.state.swiperList.concat(res.alarm);
             // if(alarm.length > 30){
             //     alarm.splice(0,10);
@@ -142,25 +145,27 @@ class app extends React.Component {
         this.state.mySwiper = new Swiper ('#swiper1', {
             slidesPerView : 3,
             centeredSlides : true,
+            autoplayStopOnLast : true,
             spaceBetween : 20,
             observer: true,
-            autoplay: {
-                delay: 1500,
-                stopOnLastSlide: false,
-                disableOnInteraction: false
-            }
+            // autoplay: {
+            //     delay: 1500,
+            //     stopOnLastSlide: false,
+            //     disableOnInteraction: false
+            // }
         })
 
         this.state.mySwiper2 = new Swiper ('#swiper2', {
             slidesPerView :3,
             centeredSlides: true,
+            autoplayStopOnLast : true,
             spaceBetween: 20,
             observer: true,
-            autoplay: {
-                delay: 1500,
-                stopOnLastSlide: false,
-                disableOnInteraction: false
-            }
+            // autoplay: {
+            //     delay: 1500,
+            //     stopOnLastSlide: false,
+            //     disableOnInteraction: false
+            // }
         })
 
         this.state.mySwiper3 = new Swiper ('#swiper3', {
@@ -177,6 +182,12 @@ class app extends React.Component {
 
         this.state.interval = setInterval(() => {
             this.getDataInfo();
+            if(this.state.mySwiper.activeIndex < this.state.invasionArray.length - 2){
+                this.state.mySwiper.slideNext();
+            }
+            if(this.state.mySwiper2.activeIndex < this.state.personMoArray.length - 2){
+                this.state.mySwiper2.slideNext();
+            }
         }, 2000)
 
         this.state.intervalTime = setInterval(() => {
