@@ -23,13 +23,14 @@ class app extends React.Component {
                     height: "100%"
                 }
             },
-            tabList: [
+            tabList: [ //实时监控tab选项卡
                 {id: 2, name: "走廊"},
                 {id: 3, name: "大厅"},
                 {id: 1, name: "办公室"},
                 {id: 4, name: "广场"}
             ],
-            warningType: {
+            dataTime: [], //实时监控时间
+            warningType: { //安全监控类别
                 "5G": "5G巡航",
                 fall: "行人跌倒警告",
                 fight: "行人斗殴警告",
@@ -39,20 +40,19 @@ class app extends React.Component {
                 personMo: "陌生人告警",
                 smoke: "吸烟识别"
             },
+            swiperList: [], //告警轮播list
+            invasionArray: [], //重点区域入侵list
+            personMoArray: [], //陌生人警告list
+            dataType: [ //告警趋势分类
+                {id:1,name:"月度", key:"mouth"},
+                {id:2,name:"每日", key:"day"}
+            ],
             tabSelectId: 2,
             mapData: [],
             data: {},
             auotTime: 2,
             interval: null,
             intervalTime: null, 
-            swiperList: [],
-            dataTime: [],
-            invasionArray: [],
-            personMoArray: [],
-            dataType: [
-                {id:1,name:"月度", key:"mouth"},
-                {id:2,name:"每日", key:"day"}
-            ],
             dataSelect: {id:1,name:"月度", key:"mouth"},
             mySwiper: null,
             mySwiper2: null,
